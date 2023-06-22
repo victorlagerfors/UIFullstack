@@ -5,10 +5,10 @@ export type NoteDocument = HydratedDocument<Note>;
 
 @Schema()
 export class Note {
-  @Prop()
+  @Prop({ required: true })
   content: string;
 
-  @Prop()
+  @Prop({ required: true })
   owner: string;
 }
 

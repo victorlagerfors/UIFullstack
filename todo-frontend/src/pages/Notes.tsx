@@ -13,7 +13,10 @@ export function Notes() {
     const result = await post<{
       content: string;
       owner: string;
-    }>("http://localhost:3000/note", { content: note, name: "Your Name Here" });
+    }>("http://localhost:3000/note", {
+      content: note,
+      owner: "Your Name Here",
+    });
   };
   return (
     <NoteContainer>
