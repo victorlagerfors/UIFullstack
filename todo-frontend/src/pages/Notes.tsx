@@ -3,23 +3,30 @@ import { Card } from "../components/Card";
 import { CardInput } from "../components/CardInput";
 import { useState } from "react";
 import { post } from "../utils/api";
+import { store } from "../utils/store";
+
+import { useSyncedStore } from "@syncedstore/react";
 
 export function Notes() {
-  const [notes, setNotes] = useState<string[]>([]);
+  const state = useSyncedStore(store);
 
   const addNote = async (note: string) => {
     // Add the new note to the beginning of the notes array
-    setNotes((prevNotes) => [note, ...prevNotes]);
-    const result = await post<{
-      content: string;
-      owner: string;
-    }>("http://localhost:3000/note", { content: note, name: "Your Name Here" });
+    console.log(state);
+    state.notes.push({ description: note, checked: false });
   };
   return (
     <NoteContainer>
       <CardInput onSubmit={addNote}></CardInput>
-      {notes.map((note, index) => (
-        <Card key={index}>{note}</Card>
+      {state.notes.map((note, index) => (
+        <Card key={index}>
+          {note.description}
+          <input
+            checked={note.checked}
+            onChange={() => (note.checked = !note.checked)}
+            type="checkbox"
+          ></input>
+        </Card>
       ))}
     </NoteContainer>
   );
