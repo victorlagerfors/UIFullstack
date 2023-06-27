@@ -35,7 +35,6 @@ export class MongodbPersistenceGateway
     Logger.log('Client connected', 'WebSocketGateway');
     const req = client.upgradeReq; // Attempt to access the upgrade request object
     //setupWSConnection(client, req);
-    console.log(client);
     setupWSConnection(client, req, { docName: this.docName });
     setPersistence({
       bindState: async (docName, ydoc) => {

@@ -1,31 +1,57 @@
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Card } from "../components/Card";
 import { CardInput } from "../components/CardInput";
-import { useState } from "react";
-import { post } from "../utils/api";
-import { store } from "../utils/store";
-
 import { useSyncedStore } from "@syncedstore/react";
+import { store } from "../utils/store";
 
 export function Notes() {
   const state = useSyncedStore(store);
 
-  const addNote = async (note: string) => {
-    // Add the new note to the beginning of the notes array
-    console.log(state);
-    state.notes.push({ description: note, checked: false });
+  const [editingIndex, setEditingIndex] = useState(-1); // Track the index of the note being edited
+
+  const updateNote = (index, newDescription) => {
+    const updatedNotes = [...state.notes]; // Create a copy of the notes array
+    updatedNotes[index].description = newDescription; // Update the description of the specific note
+    state.notes = updatedNotes; // Update the notes array in state
   };
+
+  const startEditing = (index) => {
+    setEditingIndex(index); // Set the index of the note being edited
+  };
+
+  const finishEditing = () => {
+    setEditingIndex(-1); // Reset the editing index
+  };
+
   return (
     <NoteContainer>
-      <CardInput onSubmit={addNote}></CardInput>
+      <CardInput
+        onSubmit={(note) =>
+          state.notes.unshift({ description: note, checked: false })
+        }
+      ></CardInput>
       {state.notes.map((note, index) => (
         <Card key={index}>
-          {note.description}
+          {editingIndex === index ? (
+            <NoteInput
+              value={note.description}
+              onChange={(e) => updateNote(index, e.target.value)}
+              autoFocus
+            />
+          ) : (
+            note.description
+          )}
           <input
             checked={note.checked}
             onChange={() => (note.checked = !note.checked)}
             type="checkbox"
           ></input>
+          {editingIndex === index ? (
+            <Button onClick={finishEditing}>Done</Button>
+          ) : (
+            <Button onClick={() => startEditing(index)}>Edit</Button>
+          )}
         </Card>
       ))}
     </NoteContainer>
@@ -36,4 +62,12 @@ const NoteContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 200px;
+`;
+
+const NoteInput = styled.input`
+  margin-bottom: 5px;
+`;
+
+const Button = styled.button`
+  margin-top: 5px;
 `;
