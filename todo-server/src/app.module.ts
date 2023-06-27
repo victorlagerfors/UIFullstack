@@ -9,7 +9,7 @@ import { MongodbPersistenceModule } from './mongodb-persistence/mongodb-persiste
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/nest'),
+    MongooseModule.forRoot(process.env.MONGODB_URL),
     NoteModule,
     MongodbPersistenceModule,
   ],
