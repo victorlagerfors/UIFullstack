@@ -12,19 +12,8 @@ export function Notes() {
 
   const addNote = async (note: string) => {
     // Add the new note to the beginning of the notes array
-<<<<<<< HEAD
     console.log(state);
     state.notes.push({ description: note, checked: false });
-=======
-    setNotes((prevNotes) => [note, ...prevNotes]);
-    const result = await post<{
-      content: string;
-      owner: string;
-    }>("http://localhost:3000/note", {
-      content: note,
-      owner: "Your Name Here",
-    });
->>>>>>> e834a8b85f0cc358ebf4711d911f142c76fa712e
   };
   return (
     <NoteContainer>
