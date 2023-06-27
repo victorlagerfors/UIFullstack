@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Card } from "../components/Card";
 import { CardInput } from "../components/CardInput";
+// @ts-ignore
 import { useSyncedStore } from "@syncedstore/react";
 import { store } from "../utils/store";
 

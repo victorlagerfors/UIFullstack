@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-ignore
 import { syncedStore, getYjsDoc } from "@syncedstore/core";
+// @ts-ignore
 import { WebsocketProvider } from "y-websocket";
 
 console.log("creating store");
