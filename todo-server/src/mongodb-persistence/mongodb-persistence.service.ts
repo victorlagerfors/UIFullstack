@@ -6,7 +6,12 @@ export class MongodbPersistenceService {
   private readonly mdb: MongodbPersistence;
 
   constructor() {
-    this.mdb = new MongodbPersistence('mongodb://localhost:27017/yjstest', {
+    const mongodbUrl = process.env.MONGODB_URL;
+    if (!mongodbUrl) {
+      throw new Error('Please set MONGODB_URL in your environment variables.');
+    }
+
+    this.mdb = new MongodbPersistence(mongodbUrl, {
       collectionName: 'transactions',
       flushSize: 100,
       multipleCollections: true,

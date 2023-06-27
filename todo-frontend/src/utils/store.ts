@@ -1,6 +1,4 @@
 import { syncedStore, getYjsDoc } from "@syncedstore/core";
-import { WebrtcProvider } from "y-webrtc";
-import { IndexeddbPersistence } from "y-indexeddb";
 import { WebsocketProvider } from "y-websocket";
 
 console.log("creating store");
@@ -11,7 +9,13 @@ export const store = syncedStore({
 
 const doc = getYjsDoc(store);
 
-const wsProvider = new WebsocketProvider("ws://localhost:3000", "notes", doc);
+// Use the environment variable
+const wsUrl = import.meta.env.VITE_WS_URL;
+if (!wsUrl) {
+  throw new Error("Please set VITE_WS_URL in your environment variables.");
+}
+
+const wsProvider = new WebsocketProvider(wsUrl, "notes", doc);
 
 wsProvider.on("status", (event) => {
   console.log(event.status); // logs "connected" or "disconnected"
