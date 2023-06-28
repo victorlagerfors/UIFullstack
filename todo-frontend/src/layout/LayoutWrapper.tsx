@@ -20,6 +20,7 @@ const TopBar = styled.div`
   top: 0;
   width: 100%;
   box-sizing: border-box;
+  z-index: 200;
 `;
 
 const Content = styled.div`

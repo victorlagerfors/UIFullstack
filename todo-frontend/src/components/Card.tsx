@@ -7,14 +7,10 @@ interface CardProps {
 }
 
 export function Card(props: CardProps) {
-  return (
-    <CardContainer tiltMaxAngleX={6} tiltMaxAngleY={6} glareEnable={true}>
-      {props.children}
-    </CardContainer>
-  );
+  return <CardContainer>{props.children}</CardContainer>;
 }
 
-const CardContainer = styled(Tilt)`
+const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
