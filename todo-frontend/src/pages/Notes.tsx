@@ -1,28 +1,34 @@
+// Notes.tsx
 import { useState } from "react";
-import styled from "styled-components";
-import { Card } from "../components/Card";
 import { CardInput } from "../components/CardInput";
-
 import { Note } from "../utils/syncedStore";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
+import { NoteCard } from "../components/NoteCard";
 
 export function Notes(props: { notes: Note[] }) {
   let { notes } = props;
 
-  const [editingIndex, setEditingIndex] = useState(-1); // Track the index of the note being edited
-  const [showDone, setShowDone] = useState(true); // Add this state variable
+  const [editingIndex, setEditingIndex] = useState(-1);
+  const [showDone, setShowDone] = useState(true);
+
+  const userStatus = useSelector(
+    (state: { user: { name: string } }) => state.user.name
+  );
 
   const updateNote = (index, newDescription) => {
-    const updatedNotes = [...notes]; // Create a copy of the notes array
-    updatedNotes[index].description = newDescription; // Update the description of the specific note
-    notes = updatedNotes; // Update the notes array in state
+    const updatedNotes = [...notes];
+    updatedNotes[index].description = newDescription;
+    updatedNotes[index].lastUpdatedBy = userStatus;
+    notes = updatedNotes;
   };
 
   const startEditing = (index) => {
-    setEditingIndex(index); // Set the index of the note being edited
+    setEditingIndex(index);
   };
 
   const finishEditing = () => {
-    setEditingIndex(-1); // Reset the editing index
+    setEditingIndex(-1);
   };
 
   return (
@@ -32,45 +38,31 @@ export function Notes(props: { notes: Note[] }) {
           notes.unshift({
             id: Date.now().toString(),
             description: note,
+            lastUpdatedBy: userStatus,
             done: false,
           })
         }
       ></CardInput>
-      <div>
-        <input
+      <DoneFilter>
+        <FilterButton
           type="checkbox"
           checked={showDone}
           onChange={(e) => setShowDone(e.target.checked)}
         />
         <span>Show done?</span>
-      </div>
+      </DoneFilter>
       {notes
-        .filter((note) => showDone || !note.done) // Only show done notes if showDone is true
+        .filter((note) => showDone || !note.done)
         .map((note, index) => (
-          <Card key={index}>
-            {editingIndex === index ? (
-              <NoteInput
-                value={note.description}
-                onChange={(e) => updateNote(index, e.target.value)}
-                autoFocus
-              />
-            ) : (
-              note.description
-            )}
-            <span>
-              <input
-                checked={note.done}
-                onChange={() => (note.done = !note.done)}
-                type="checkbox"
-              ></input>
-              Done?
-            </span>
-            {editingIndex === index ? (
-              <Button onClick={finishEditing}>Done</Button>
-            ) : (
-              <Button onClick={() => startEditing(index)}>Edit</Button>
-            )}
-          </Card>
+          <NoteCard
+            key={index}
+            note={note}
+            index={index}
+            isEditing={editingIndex === index}
+            onUpdate={updateNote}
+            onStartEditing={startEditing}
+            onFinishEditing={finishEditing}
+          />
         ))}
     </NoteContainer>
   );
@@ -81,10 +73,13 @@ const NoteContainer = styled.div`
   flex-direction: column;
 `;
 
-const NoteInput = styled.input`
-  margin-bottom: 5px;
+const DoneFilter = styled.span`
+  display: flex;
+  width: 100%;
+  padding: 10px 0px;
 `;
 
-const Button = styled.button`
-  margin-top: 5px;
+const FilterButton = styled.input`
+  width: 15px;
+  height: 15px;
 `;

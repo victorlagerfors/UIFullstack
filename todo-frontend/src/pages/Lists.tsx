@@ -15,7 +15,9 @@ export function Lists() {
 
   return (
     <ListWrapper>
-      <CardInput onSubmit={addList} />
+      <span>
+        <CardInput onSubmit={addList} />
+      </span>
       <ListContainer>
         {state.lists.map((list) => (
           <ListComponent key={list.id}>

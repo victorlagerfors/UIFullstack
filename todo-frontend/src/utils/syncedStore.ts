@@ -12,6 +12,7 @@ export interface Note {
   id: string;
   description: string;
   done: boolean;
+  lastUpdatedBy: string;
   cost?: number;
   children?: Note[];
 }
