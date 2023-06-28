@@ -26,7 +26,7 @@ export function CardInput({ onSubmit }: { onSubmit: (value: string) => void }) {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <button type="submit">Add card</button>
+        <button type="submit">Add</button>
       </form>
     </Card>
   );

@@ -2,19 +2,19 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Card } from "../components/Card";
 import { CardInput } from "../components/CardInput";
-// @ts-ignore
-import { useSyncedStore } from "@syncedstore/react";
-import { store } from "../utils/store";
 
-export function Notes() {
-  const state = useSyncedStore(store);
+import { Note } from "../utils/syncedStore";
+
+export function Notes(props: { notes: Note[] }) {
+  let { notes } = props;
 
   const [editingIndex, setEditingIndex] = useState(-1); // Track the index of the note being edited
+  const [showDone, setShowDone] = useState(true); // Add this state variable
 
   const updateNote = (index, newDescription) => {
-    const updatedNotes = [...state.notes]; // Create a copy of the notes array
+    const updatedNotes = [...notes]; // Create a copy of the notes array
     updatedNotes[index].description = newDescription; // Update the description of the specific note
-    state.notes = updatedNotes; // Update the notes array in state
+    notes = updatedNotes; // Update the notes array in state
   };
 
   const startEditing = (index) => {
@@ -29,32 +29,49 @@ export function Notes() {
     <NoteContainer>
       <CardInput
         onSubmit={(note) =>
-          state.notes.unshift({ description: note, checked: false })
+          notes.unshift({
+            id: Date.now().toString(),
+            description: note,
+            done: false,
+          })
         }
       ></CardInput>
-      {state.notes.map((note, index) => (
-        <Card key={index}>
-          {editingIndex === index ? (
-            <NoteInput
-              value={note.description}
-              onChange={(e) => updateNote(index, e.target.value)}
-              autoFocus
-            />
-          ) : (
-            note.description
-          )}
-          <input
-            checked={note.checked}
-            onChange={() => (note.checked = !note.checked)}
-            type="checkbox"
-          ></input>
-          {editingIndex === index ? (
-            <Button onClick={finishEditing}>Done</Button>
-          ) : (
-            <Button onClick={() => startEditing(index)}>Edit</Button>
-          )}
-        </Card>
-      ))}
+      <div>
+        <input
+          type="checkbox"
+          checked={showDone}
+          onChange={(e) => setShowDone(e.target.checked)}
+        />
+        <span>Show done?</span>
+      </div>
+      {notes
+        .filter((note) => showDone || !note.done) // Only show done notes if showDone is true
+        .map((note, index) => (
+          <Card key={index}>
+            {editingIndex === index ? (
+              <NoteInput
+                value={note.description}
+                onChange={(e) => updateNote(index, e.target.value)}
+                autoFocus
+              />
+            ) : (
+              note.description
+            )}
+            <span>
+              <input
+                checked={note.done}
+                onChange={() => (note.done = !note.done)}
+                type="checkbox"
+              ></input>
+              Done?
+            </span>
+            {editingIndex === index ? (
+              <Button onClick={finishEditing}>Done</Button>
+            ) : (
+              <Button onClick={() => startEditing(index)}>Edit</Button>
+            )}
+          </Card>
+        ))}
     </NoteContainer>
   );
 }
@@ -62,7 +79,6 @@ export function Notes() {
 const NoteContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 200px;
 `;
 
 const NoteInput = styled.input`

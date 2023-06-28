@@ -16,5 +16,7 @@ const CardContainer = styled.div`
   border: 1px solid grey;
   border-radius: 4px;
   padding: 10px;
+  margin: 5px 0px;
   min-height: 40px;
+  width: 100%;
 `;
