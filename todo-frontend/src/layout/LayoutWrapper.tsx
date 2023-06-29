@@ -2,6 +2,9 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { reduxStore, setName } from "../utils/reduxStore";
+import { useEffect, useState } from "react";
+import NameModal from "../components/NameModal";
 
 const Spinner = () => <FontAwesomeIcon icon={faSpinner} spin />;
 const Check = () => <FontAwesomeIcon icon={faCheck} />;
@@ -34,6 +37,8 @@ const Content = styled.div`
   text-align: center;
 `;
 
+const LogoutButton = styled.button``;
+
 export function LayoutWrapper(props) {
   const connectionStatus = useSelector(
     (state: { connection: { status: string } }) => state.connection.status
@@ -41,6 +46,11 @@ export function LayoutWrapper(props) {
   const userStatus = useSelector(
     (state: { user: { name: string } }) => state.user.name
   );
+
+  const handleLogout = () => {
+    localStorage.removeItem("username"); // Remove the username from local storage
+    reduxStore.dispatch(setName("")); // Clear the username from the Redux store
+  };
   let statusIcon;
   switch (connectionStatus) {
     case "connecting":
@@ -56,15 +66,39 @@ export function LayoutWrapper(props) {
       statusIcon = null;
   }
 
+  const [showModal, setShowModal] = useState(true);
+
+  useEffect(() => {
+    const userName = localStorage.getItem("username");
+
+    if (userName) {
+      reduxStore.dispatch(setName(userName));
+      setShowModal(false);
+    } else {
+      setShowModal(true);
+    }
+  }, [userStatus]);
+
+  const handleNameSubmit = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
-      <TopBar>
-        <div>Welcome {userStatus} </div>
-        <div>
-          Connection Status: {connectionStatus} {statusIcon}
-        </div>
-      </TopBar>
-      <Content>{props.children}</Content>
+      {showModal ? (
+        <NameModal onNameSubmit={handleNameSubmit} />
+      ) : (
+        <>
+          <TopBar>
+            <div>Welcome {userStatus} </div>
+            <div>
+              Connection Status: {connectionStatus} {statusIcon}
+            </div>
+            <LogoutButton onClick={handleLogout}>Sign me out</LogoutButton>
+          </TopBar>
+          <Content>{props.children}</Content>
+        </>
+      )}
     </>
   );
 }

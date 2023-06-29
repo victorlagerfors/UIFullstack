@@ -5,8 +5,6 @@ import { Note } from "../utils/syncedStore";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { NoteCard } from "../components/NoteCard";
-import { getYjsValue } from "@syncedstore/core";
-import { Array } from "yjs";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 export function Notes(props: { notes: Note[] }) {
@@ -22,7 +20,6 @@ export function Notes(props: { notes: Note[] }) {
     if (!result.destination) {
       return;
     }
-
     const startIndex = result.source.index;
     const endIndex = result.destination.index;
 
@@ -36,7 +33,6 @@ export function Notes(props: { notes: Note[] }) {
     };
 
     notes.splice(startIndex, 1);
-
     notes.splice(endIndex, 0, noteToInsert);
   };
 
@@ -89,6 +85,7 @@ export function Notes(props: { notes: Note[] }) {
 const NoteContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
 `;
 
 const DoneFilter = styled.span`
@@ -105,8 +102,7 @@ const FilterButton = styled.input`
 const NotesList = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: auto;
-  max-height: 50vh; // adjust this as necessary
+  overflow: scroll;
   padding: 2px;
   gap: 5px;
 `;

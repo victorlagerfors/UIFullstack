@@ -21,6 +21,7 @@ export interface List {
   id: string;
   title: string;
   notes: Note[];
+  frozen?: string;
 }
 
 export const synchronizedStore: { lists: List[] } = syncedStore({
