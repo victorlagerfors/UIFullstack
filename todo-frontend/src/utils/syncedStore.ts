@@ -15,6 +15,7 @@ export interface Note {
   lastUpdatedBy: string;
   cost?: number;
   children?: Note[];
+  detailedDescription?: string;
 }
 
 export interface List {

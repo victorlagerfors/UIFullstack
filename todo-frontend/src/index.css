@@ -76,7 +76,7 @@ input {
     color: white;
     &:disabled {
       background-color: #c6c6c6;
-
+      cursor: not-allowed;
     }
   }
 }
@@ -94,7 +94,7 @@ input {
     color: white;
     &:disabled {
       background-color: #c6c6c6;
-
+      cursor: not-allowed;
     }
   }
 }

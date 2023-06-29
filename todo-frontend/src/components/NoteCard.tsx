@@ -7,6 +7,7 @@ import { TiltCard } from "./TiltCard";
 import { CardInput } from "./CardInput";
 import React from "react";
 import { useSelector } from "react-redux";
+import ReactMarkdown from "react-markdown";
 
 const Check = () => <FontAwesomeIcon icon={faCheck} />;
 const Edit = () => <FontAwesomeIcon icon={faPencil} />;
@@ -35,6 +36,11 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
 
   const updateNote = (newDescription) => {
     note.description = newDescription;
+    note.lastUpdatedBy = userStatus;
+  };
+
+  const updateDetailedDescription = (newDescription) => {
+    note.detailedDescription = newDescription;
     note.lastUpdatedBy = userStatus;
   };
 
@@ -77,13 +83,25 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
           ></DoneButton>
           <DescriptionContainer>
             {isEditing ? (
-              <input
-                value={note.description}
-                onChange={(e) => updateNote(e.target.value)}
-                autoFocus
-              />
+              <>
+                <input
+                  value={note.description}
+                  onChange={(e) => updateNote(e.target.value)}
+                  autoFocus
+                />
+                <textarea
+                  value={note.detailedDescription}
+                  onChange={(e) => updateDetailedDescription(e.target.value)}
+                  autoFocus
+                ></textarea>
+              </>
             ) : (
-              note.description
+              <>
+                <TitleDescription>{note.description}</TitleDescription>
+                <DetailedDescription>
+                  <ReactMarkdown>{note.detailedDescription}</ReactMarkdown>
+                </DetailedDescription>
+              </>
             )}
           </DescriptionContainer>
 
@@ -128,12 +146,16 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
   );
 };
 
-const Indent = styled.div`
-  margin-left: 20px;
+const TitleDescription = styled.span`
+  font-size: 18px;
 `;
 
-const NoteInput = styled.input`
-  margin-bottom: 5px;
+const DetailedDescription = styled.span`
+  font-size: 12px;
+`;
+
+const Indent = styled.div`
+  margin-left: 20px;
 `;
 
 const IconButton = styled.button`
@@ -154,21 +176,24 @@ const NoteInfo = styled.span`
 `;
 
 const DoneButton = styled.input`
+  align-self: flex-start;
   width: 20px;
   height: 20px;
   margin-right: 10px;
 `;
 
-const CardContent = styled.span`
+const CardContent = styled.div`
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   width: 100%;
 `;
 
-const DescriptionContainer = styled.span`
+const DescriptionContainer = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-self: flex-start;
   flex-grow: 1;
+  text-align: left;
 `;

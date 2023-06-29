@@ -81,7 +81,7 @@ const ListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-height: calc(100vh - 60px);
+  max-height: calc(100vh - 80px);
 `;
 
 const FrozenText = styled.div`
@@ -115,8 +115,9 @@ const ListComponent = styled.div<{ isFrozen: boolean }>`
   z-index: 2;
   pointer-events: ${(props) => (props.isFrozen ? "none" : "auto")};
   min-height: 0;
-  overflow: scroll;
+  overflow: auto;
   min-width: 300px;
+  width: 100%;
 `;
 
 const DeleteButton = styled.button`
