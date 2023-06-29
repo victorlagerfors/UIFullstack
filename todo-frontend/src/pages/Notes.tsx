@@ -5,6 +5,9 @@ import { Note } from "../utils/syncedStore";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { NoteCard } from "../components/NoteCard";
+import { getYjsValue } from "@syncedstore/core";
+import { Array } from "yjs";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 export function Notes(props: { notes: Note[] }) {
   const { notes } = props;
@@ -14,6 +17,27 @@ export function Notes(props: { notes: Note[] }) {
   const userStatus = useSelector(
     (state: { user: { name: string } }) => state.user.name
   );
+
+  const onDragEnd = (result: any) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const startIndex = result.source.index;
+    const endIndex = result.destination.index;
+
+    const noteCopy = notes[startIndex];
+    const noteToInsert = {
+      id: noteCopy.id,
+      description: noteCopy.description,
+      lastUpdatedBy: userStatus,
+      done: noteCopy.done,
+    };
+
+    notes.splice(startIndex, 1);
+
+    notes.splice(endIndex, 0, noteToInsert);
+  };
 
   return (
     <NoteContainer>
@@ -35,11 +59,28 @@ export function Notes(props: { notes: Note[] }) {
         />
         <span>Show done?</span>
       </DoneFilter>
-      <NotesList>
-        {notes.map((note, index) => (
-          <NoteCard key={index} note={note} displayDone={showDone} />
-        ))}
-      </NotesList>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="notes">
+          {(provided) => (
+            <NotesList ref={provided.innerRef} {...provided.droppableProps}>
+              {notes.map((note, index) => (
+                <Draggable key={note.id} draggableId={note.id} index={index}>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <NoteCard note={note} displayDone={showDone} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </NotesList>
+          )}
+        </Droppable>
+      </DragDropContext>
     </NoteContainer>
   );
 }
