@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import styled from "styled-components";
 import Tilt from "react-parallax-tilt";
 import { Card } from "./Card";
 
