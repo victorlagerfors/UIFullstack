@@ -27,11 +27,12 @@ export function Notes(props: { notes: Note[] }) {
     const endIndex = result.destination.index;
 
     const noteCopy = notes[startIndex];
-    const noteToInsert = {
+    const noteToInsert: Note = {
       id: noteCopy.id,
       description: noteCopy.description,
       lastUpdatedBy: userStatus,
       done: noteCopy.done,
+      children: JSON.parse(JSON.stringify(noteCopy.children || [])),
     };
 
     notes.splice(startIndex, 1);
