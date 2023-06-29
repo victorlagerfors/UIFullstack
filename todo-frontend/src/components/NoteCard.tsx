@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { TiltCard } from "./TiltCard";
 import { CardInput } from "./CardInput";
 import React from "react";
+import { useSelector } from "react-redux";
 
 const Check = () => <FontAwesomeIcon icon={faCheck} />;
 const Edit = () => <FontAwesomeIcon icon={faPencil} />;
@@ -13,35 +14,46 @@ const Plus = () => <FontAwesomeIcon icon={faPlus} />;
 
 interface NoteCardProps {
   note: Note;
-  index: number;
-  isEditing: boolean;
-  onUpdate: (index: number, newDescription: string) => void;
-  onStartEditing: (index: number) => void;
-  onFinishEditing: () => void;
-  onAddChild: (index: number, childDescription: string) => void;
+  displayDone: boolean;
 }
 
-export const NoteCard: React.FC<NoteCardProps> = ({
-  note,
-  index,
-  isEditing,
-  onUpdate,
-  onStartEditing,
-  onFinishEditing,
-  onAddChild,
-}) => {
+export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [showInput, setShowInput] = useState(false);
+
+  const userStatus = useSelector(
+    (state: { user: { name: string } }) => state.user.name
+  );
+
+  const updateNote = (newDescription) => {
+    note.description = newDescription;
+    note.lastUpdatedBy = userStatus;
+  };
+
+  const addChildNote = (childDescription) => {
+    const newChild = {
+      id: Date.now().toString(),
+      description: childDescription,
+      lastUpdatedBy: userStatus,
+      done: false,
+    };
+
+    note.children = note.children || [];
+    note.children.push(newChild);
+  };
 
   const handleAddChild = () => {
     setShowInput(true);
   };
 
   const handleOnSubmit = (childNoteDescription: string) => {
-    onAddChild(index, childNoteDescription);
+    addChildNote(childNoteDescription);
     setShowInput(false);
   };
-
-  const renderNote = (note: Note, index: number) => (
+  if (!displayDone && note.done) {
+    return null;
+  }
+  return (
     <React.Fragment key={note.id}>
       <TiltCard>
         <CardContent>
@@ -54,7 +66,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({
             {isEditing ? (
               <NoteInput
                 value={note.description}
-                onChange={(e) => onUpdate(index, e.target.value)}
+                onChange={(e) => updateNote(e.target.value)}
                 autoFocus
               />
             ) : (
@@ -63,11 +75,11 @@ export const NoteCard: React.FC<NoteCardProps> = ({
           </DescriptionContainer>
 
           {isEditing ? (
-            <IconButton onClick={onFinishEditing}>
+            <IconButton onClick={() => setIsEditing(false)}>
               <Check />
             </IconButton>
           ) : (
-            <IconButton onClick={() => onStartEditing(index)}>
+            <IconButton onClick={() => setIsEditing(true)}>
               <Edit />
             </IconButton>
           )}
@@ -78,11 +90,13 @@ export const NoteCard: React.FC<NoteCardProps> = ({
         </IconButton>
       </TiltCard>
       {showInput && <CardInput onSubmit={handleOnSubmit} />}
-      <Indent>{note.children && note.children.map(renderNote)}</Indent>
+      <Indent>
+        {note.children?.map((child) => (
+          <NoteCard key={child.id} note={child} displayDone={displayDone} />
+        ))}
+      </Indent>
     </React.Fragment>
   );
-
-  return renderNote(note, index);
 };
 
 const Indent = styled.div`
@@ -126,11 +140,4 @@ const DescriptionContainer = styled.span`
   align-items: center;
   justify-self: flex-start;
   flex-grow: 1;
-`;
-
-const AddChildContainer = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
 `;
