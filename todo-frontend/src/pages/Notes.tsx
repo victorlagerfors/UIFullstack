@@ -29,6 +29,7 @@ export function Notes(props: { notes: Note[] }) {
       description: noteCopy.description,
       lastUpdatedBy: userStatus,
       done: noteCopy.done,
+      cost: noteCopy.cost,
       children: JSON.parse(JSON.stringify(noteCopy.children || [])),
     };
 

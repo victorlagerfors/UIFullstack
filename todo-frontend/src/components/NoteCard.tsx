@@ -25,8 +25,21 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
     (state: { user: { name: string } }) => state.user.name
   );
 
+  const calculateTotalCost = (note: Note) => {
+    let totalCost = note.cost || 0;
+    note.children?.forEach((child) => {
+      totalCost += calculateTotalCost(child);
+    });
+    return totalCost;
+  };
+
   const updateNote = (newDescription) => {
     note.description = newDescription;
+    note.lastUpdatedBy = userStatus;
+  };
+
+  const updateCost = (cost) => {
+    note.cost = Number(cost);
     note.lastUpdatedBy = userStatus;
   };
 
@@ -64,7 +77,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
           ></DoneButton>
           <DescriptionContainer>
             {isEditing ? (
-              <NoteInput
+              <input
                 value={note.description}
                 onChange={(e) => updateNote(e.target.value)}
                 autoFocus
@@ -84,7 +97,23 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
             </IconButton>
           )}
         </CardContent>
-        <EditedBy>@{note.lastUpdatedBy}</EditedBy>
+        <NoteInfo>
+          <div>@{note.lastUpdatedBy}</div>
+          <span>
+            Total Cost: {calculateTotalCost(note)}, Own Cost:{" "}
+            {isEditing ? (
+              <input
+                value={note.cost}
+                onChange={(e) => updateCost(e.target.value)}
+                type="number"
+                autoFocus
+              />
+            ) : (
+              note.cost || 0
+            )}
+          </span>
+          <div></div>
+        </NoteInfo>
         <IconButton onClick={handleAddChild}>
           <Plus />
         </IconButton>
@@ -114,12 +143,14 @@ const IconButton = styled.button`
   color: black;
 `;
 
-const EditedBy = styled.span`
+const NoteInfo = styled.span`
   font-size: 10px;
   left: 10px;
   width: 100%;
   margin-top: 8px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
 `;
 
 const DoneButton = styled.input`

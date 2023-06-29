@@ -64,7 +64,9 @@ export function Lists() {
             {list.frozen ? (
               <ListOverlay>
                 <FrozenIcon />
-                <>Frozen by {list.frozen ? `@${list.frozen}` : ""}</>
+                <FrozenText>
+                  Frozen by {list.frozen ? `@${list.frozen}` : ""}
+                </FrozenText>
               </ListOverlay>
             ) : null}
             <Notes notes={list.notes} />
@@ -80,6 +82,14 @@ const ListWrapper = styled.div`
   flex-direction: column;
   gap: 20px;
   max-height: calc(100vh - 60px);
+`;
+
+const FrozenText = styled.div`
+  background-color: white;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
 const ListContainer = styled.div`
