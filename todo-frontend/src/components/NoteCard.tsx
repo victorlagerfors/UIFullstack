@@ -86,16 +86,19 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
           <DescriptionContainer>
             {isEditing ? (
               <>
-                <input
+                <DescriptionInput
                   value={note.description}
                   onChange={(e) => updateNote(e.target.value)}
                   autoFocus
                 />
-                <textarea
+                <DetailedDescriptionHeader>
+                  Detailed Description (Supports Markdown)
+                </DetailedDescriptionHeader>
+                <DetailedDescriptionTextArea
                   value={note.detailedDescription}
                   onChange={(e) => updateDetailedDescription(e.target.value)}
                   autoFocus
-                ></textarea>
+                ></DetailedDescriptionTextArea>
               </>
             ) : (
               <>
@@ -122,7 +125,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
           <span>
             Total Cost: {calculateTotalCost(note)}, Own Cost:{" "}
             {isEditing ? (
-              <input
+              <CostInput
                 value={note.cost}
                 onChange={(e) => updateCost(e.target.value)}
                 type="number"
@@ -167,6 +170,10 @@ const IconButton = styled.button`
   color: black;
 `;
 
+const CostInput = styled.input`
+  width: 80px;
+`;
+
 const NoteInfo = styled.span`
   font-size: 10px;
   left: 10px;
@@ -198,4 +205,30 @@ const DescriptionContainer = styled.div`
   justify-self: flex-start;
   flex-grow: 1;
   text-align: left;
+`;
+
+const DetailedDescriptionTextArea = styled.textarea`
+  width: 100%;
+  height: 150px;
+  padding: 12px 12px;
+  margin: 5px 20px 20px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #ffffff;
+  font-size: 16px;
+  resize: none;
+`;
+
+const DescriptionInput = styled.input`
+  height: 25px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #ffffff;
+`;
+
+const DetailedDescriptionHeader = styled.div`
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 600;
 `;

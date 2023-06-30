@@ -8,7 +8,7 @@ interface CardProps {
 
 export function TiltCard(props: CardProps) {
   return (
-    <Tilt tiltMaxAngleX={6} tiltMaxAngleY={6} glareEnable={true}>
+    <Tilt tiltMaxAngleX={2} tiltMaxAngleY={2} glareEnable={true}>
       <Card>{props.children}</Card>
     </Tilt>
   );
