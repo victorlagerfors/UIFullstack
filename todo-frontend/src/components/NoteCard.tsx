@@ -118,7 +118,10 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
           </DescriptionContainer>
 
           {isEditing ? (
-            <IconButton onClick={() => setIsEditing(false)}>
+            <IconButton
+              data-testid="done-button"
+              onClick={() => setIsEditing(false)}
+            >
               <Check />
             </IconButton>
           ) : (
