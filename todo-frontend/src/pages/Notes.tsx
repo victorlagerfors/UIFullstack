@@ -5,7 +5,12 @@ import { Note } from "../utils/syncedStore";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { NoteCard } from "../components/NoteCard";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import {
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+} from "@hello-pangea/dnd";
 import { v4 as uuid } from "uuid";
 
 export function Notes(props: { notes: Note[] }) {
@@ -17,7 +22,7 @@ export function Notes(props: { notes: Note[] }) {
     (state: { user: { name: string } }) => state.user.name
   );
 
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return;
     }

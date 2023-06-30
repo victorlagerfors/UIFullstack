@@ -29,6 +29,8 @@ const Modal = styled.div`
 `;
 
 const ModalContent = styled.div`
+  max-width: 800px;
+
   display: flex;
   background-color: #fefefe;
   margin: auto;
@@ -41,8 +43,9 @@ const ModalContent = styled.div`
 
 const ImageContainer = styled.div`
   width: 50%;
-  background-image: url("https://www.newdesigngroup.ca/ndgcnt/uploads/2014/11/1280px-Intel-logo.svg_.png");
+  background-image: url("/note.svg");
   background-size: contain;
+  background-position: center;
   background-repeat: no-repeat;
   margin-left: 25px;
   border-radius: 10px 0 0 10px;
@@ -59,9 +62,14 @@ const FormContainer = styled.div`
   text-align: center;
 `;
 
+const NameInput = styled.input`
+  height: 30px;
+  margin: 10px 0px;
+`;
+
 const StyledButton = styled.button`
   padding: 10px 20px;
-  margin-top: 20px;
+  margin-top: 5px;
 
   cursor: pointer;
   width: 100%;
@@ -92,7 +100,11 @@ function NameModal({ onNameSubmit }) {
             <form onSubmit={handleNameSubmit}>
               <label>
                 <div>What's your name?</div>
-                <input type="text" value={name} onChange={handleNameChange} />
+                <NameInput
+                  type="text"
+                  value={name}
+                  onChange={handleNameChange}
+                />
               </label>
               <div>
                 <StyledButton type="submit">Continue</StyledButton>

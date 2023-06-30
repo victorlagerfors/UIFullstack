@@ -2,13 +2,11 @@ import { CardInput } from "../components/CardInput";
 // @ts-ignore
 import { useSyncedStore } from "@syncedstore/react";
 import { List, Note, synchronizedStore } from "../utils/syncedStore";
-import { Notes } from "./Notes";
 import styled from "styled-components";
 import { faSnowflake, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
-const Cross = () => <FontAwesomeIcon icon={faTrash} />;
-const Snowflake = () => <FontAwesomeIcon icon={faSnowflake} />;
+import ListItem from "../components/List";
 
 export function Lists() {
   const state: { lists: List[] } = useSyncedStore(synchronizedStore);
@@ -46,31 +44,16 @@ export function Lists() {
       </span>
       <ListContainer>
         {state.lists.map((list) => (
-          <ListComponent isFrozen={!!list.frozen} key={list.id}>
-            <FreezeButton
-              isFrozen={!!list.frozen}
-              frozenByMe={list.frozen === userStatus}
-              onClick={() => freezeList(list.id)}
-              disabled={!!(list.frozen && list.frozen !== userStatus)}
-            >
-              <span>
-                <Snowflake /> <>{list.frozen ? `@${list.frozen}` : ""}</>
-              </span>
-            </FreezeButton>
-            <DeleteButton onClick={() => deleteList(list.id)}>
-              <Cross />
-            </DeleteButton>
-            <h2>{list.title}</h2>
-            {list.frozen ? (
-              <ListOverlay>
-                <FrozenIcon />
-                <FrozenText>
-                  Frozen by {list.frozen ? `@${list.frozen}` : ""}
-                </FrozenText>
-              </ListOverlay>
-            ) : null}
-            <Notes notes={list.notes} />
-          </ListComponent>
+          <ListItem
+            key={list.id}
+            title={list.title}
+            id={list.id}
+            frozen={list.frozen}
+            notes={list.notes}
+            userStatus={userStatus}
+            deleteList={deleteList}
+            freezeList={freezeList}
+          />
         ))}
       </ListContainer>
     </ListWrapper>
@@ -84,14 +67,6 @@ const ListWrapper = styled.div`
   max-height: calc(100vh - 80px);
 `;
 
-const FrozenText = styled.div`
-  background-color: white;
-  margin: 10px;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-`;
-
 const ListContainer = styled.div`
   display: flex;
   overflow-x: scroll;
@@ -102,63 +77,4 @@ const ListContainer = styled.div`
   //Extend all the way to the edge of the screen
   margin: 0 -10vw;
   padding: 0 10vw;
-`;
-
-const ListComponent = styled.div<{ isFrozen: boolean }>`
-  flex: 0 0 auto;
-  position: relative;
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  background-color: white;
-  z-index: 2;
-  pointer-events: ${(props) => (props.isFrozen ? "none" : "auto")};
-  min-height: 0;
-  overflow: auto;
-  min-width: 300px;
-`;
-
-const DeleteButton = styled.button`
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  border: none;
-  background: none;
-  color: darkgray;
-  cursor: pointer;
-`;
-
-const ListOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.7); // Adjust this as per your need
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-  z-index: 9;
-`;
-
-const FrozenIcon = styled(Snowflake)`
-  color: blue;
-  font-size: 50px; // adjust as necessary
-`;
-
-const FreezeButton = styled.button<{ isFrozen: boolean; frozenByMe: boolean }>`
-  z-index: 15;
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  border: none;
-  background-color: ${(props) =>
-    props.isFrozen ? (props.frozenByMe ? "blue" : "darkgray") : "transparent"};
-  color: ${(props) => (props.isFrozen ? "white" : "darkgray")};
-  cursor: pointer;
-  pointer-events: auto;
 `;

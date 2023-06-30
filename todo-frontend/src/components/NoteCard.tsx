@@ -45,8 +45,13 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
   };
 
   const updateCost = (cost) => {
-    note.cost = Number(cost);
-    note.lastUpdatedBy = userStatus;
+    const numberCost = Number(cost);
+    if (isNaN(numberCost)) {
+      console.log("error");
+    } else {
+      note.cost = numberCost;
+      note.lastUpdatedBy = userStatus;
+    }
   };
 
   const addChildNote = (childDescription) => {
@@ -74,6 +79,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
   if (!displayDone && note.done) {
     return null;
   }
+
   return (
     <React.Fragment key={note.id}>
       <TiltCard>
@@ -135,7 +141,6 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
               note.cost || 0
             )}
           </span>
-          <div></div>
         </NoteInfo>
         <IconButton onClick={handleAddChild}>
           <Plus />
@@ -157,6 +162,9 @@ const TitleDescription = styled.span`
 
 const DetailedDescription = styled.span`
   font-size: 12px;
+  max-width: 200px;
+  width: 0;
+  min-width: fit-content;
 `;
 
 const Indent = styled.div`
@@ -205,6 +213,7 @@ const DescriptionContainer = styled.div`
   justify-self: flex-start;
   flex-grow: 1;
   text-align: left;
+  margin-right: 10px;
 `;
 
 const DetailedDescriptionTextArea = styled.textarea`
