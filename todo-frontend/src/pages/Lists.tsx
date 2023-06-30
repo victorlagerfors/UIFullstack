@@ -1,5 +1,4 @@
 import { CardInput } from "../components/CardInput";
-// @ts-ignore
 import { useSyncedStore } from "@syncedstore/react";
 import { List, Note, synchronizedStore } from "../utils/syncedStore";
 import styled from "styled-components";

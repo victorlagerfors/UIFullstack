@@ -1,6 +1,6 @@
 // src/utils/api.ts
 
-export async function post<T>(endpoint: string, data: any): Promise<T> {
+export async function post<T>(endpoint: string, data: unknown): Promise<T> {
   const response = await fetch(endpoint, {
     method: "POST",
     headers: {

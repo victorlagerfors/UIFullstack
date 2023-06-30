@@ -16,7 +16,7 @@ const FrozenText = styled.div`
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
-const ListComponent = styled.div<{ isFrozen: boolean }>`
+const ListComponent = styled.div<{ $isFrozen: boolean }>`
   flex: 0 0 auto;
   position: relative;
   border: 1px solid #ddd;
@@ -26,7 +26,7 @@ const ListComponent = styled.div<{ isFrozen: boolean }>`
   margin-bottom: 20px;
   background-color: white;
   z-index: 2;
-  pointer-events: ${(props) => (props.isFrozen ? "none" : "auto")};
+  pointer-events: ${(props) => (props.$isFrozen ? "none" : "auto")};
   min-height: 0;
   overflow: auto;
   min-width: 300px;
@@ -62,15 +62,22 @@ const FrozenIcon = styled(Snowflake)`
   font-size: 50px; // adjust as necessary
 `;
 
-const FreezeButton = styled.button<{ isFrozen: boolean; frozenByMe: boolean }>`
+const FreezeButton = styled.button<{
+  $isFrozen: boolean;
+  $frozenByMe: boolean;
+}>`
   z-index: 15;
   position: absolute;
   left: 10px;
   top: 10px;
   border: none;
   background-color: ${(props) =>
-    props.isFrozen ? (props.frozenByMe ? "blue" : "darkgray") : "transparent"};
-  color: ${(props) => (props.isFrozen ? "white" : "darkgray")};
+    props.$isFrozen
+      ? props.$frozenByMe
+        ? "blue"
+        : "darkgray"
+      : "transparent"};
+  color: ${(props) => (props.$isFrozen ? "white" : "darkgray")};
   cursor: pointer;
   pointer-events: auto;
 `;
@@ -94,11 +101,11 @@ export const ListItem: React.FC<ListItemProps> = ({
   deleteList,
   freezeList,
 }) => (
-  <ListComponent isFrozen={!!frozen} key={id}>
+  <ListComponent $isFrozen={!!frozen} key={id}>
     <FreezeButton
       data-testid="freeze-button"
-      isFrozen={!!frozen}
-      frozenByMe={frozen === userStatus}
+      $isFrozen={!!frozen}
+      $frozenByMe={frozen === userStatus}
       onClick={() => freezeList(id)}
       disabled={!!(frozen && frozen !== userStatus)}
     >
