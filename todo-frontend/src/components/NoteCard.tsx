@@ -3,11 +3,11 @@ import { Note } from "../utils/syncedStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPencil, faPlus } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { TiltCard } from "./TiltCard";
 import { CardInput } from "./CardInput";
 import React from "react";
 import { useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
+import { Card } from "./Card";
 
 const Check = () => <FontAwesomeIcon icon={faCheck} />;
 const Edit = () => <FontAwesomeIcon icon={faPencil} />;
@@ -82,7 +82,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
 
   return (
     <React.Fragment key={note.id}>
-      <TiltCard>
+      <Card>
         <CardContent>
           <DoneButton
             checked={note.done}
@@ -152,7 +152,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
         <IconButton data-testid="add-button" onClick={handleAddChild}>
           <Plus />
         </IconButton>
-      </TiltCard>
+      </Card>
       {showInput && (
         <CardInput data-testid="card-input" onSubmit={handleOnSubmit} />
       )}
