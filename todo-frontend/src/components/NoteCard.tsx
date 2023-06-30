@@ -93,6 +93,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
             {isEditing ? (
               <>
                 <DescriptionInput
+                  data-testid="description-input"
                   value={note.description}
                   onChange={(e) => updateNote(e.target.value)}
                   autoFocus
@@ -121,7 +122,10 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
               <Check />
             </IconButton>
           ) : (
-            <IconButton onClick={() => setIsEditing(true)}>
+            <IconButton
+              data-testid="edit-button"
+              onClick={() => setIsEditing(true)}
+            >
               <Edit />
             </IconButton>
           )}
@@ -142,11 +146,13 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
             )}
           </span>
         </NoteInfo>
-        <IconButton onClick={handleAddChild}>
+        <IconButton data-testid="add-button" onClick={handleAddChild}>
           <Plus />
         </IconButton>
       </TiltCard>
-      {showInput && <CardInput onSubmit={handleOnSubmit} />}
+      {showInput && (
+        <CardInput data-testid="card-input" onSubmit={handleOnSubmit} />
+      )}
       <Indent>
         {note.children?.map((child) => (
           <NoteCard key={child.id} note={child} displayDone={displayDone} />

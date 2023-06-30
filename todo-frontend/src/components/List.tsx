@@ -85,7 +85,7 @@ interface ListItemProps {
   freezeList: (id: string) => void;
 }
 
-const ListItem: React.FC<ListItemProps> = ({
+export const ListItem: React.FC<ListItemProps> = ({
   title,
   id,
   frozen,
@@ -96,6 +96,7 @@ const ListItem: React.FC<ListItemProps> = ({
 }) => (
   <ListComponent isFrozen={!!frozen} key={id}>
     <FreezeButton
+      data-testid="freeze-button"
       isFrozen={!!frozen}
       frozenByMe={frozen === userStatus}
       onClick={() => freezeList(id)}
@@ -105,7 +106,7 @@ const ListItem: React.FC<ListItemProps> = ({
         <Snowflake /> <>{frozen ? `@${frozen}` : ""}</>
       </span>
     </FreezeButton>
-    <DeleteButton onClick={() => deleteList(id)}>
+    <DeleteButton data-testid="delete-button" onClick={() => deleteList(id)}>
       <Cross />
     </DeleteButton>
     <h2>{title}</h2>
@@ -118,5 +119,3 @@ const ListItem: React.FC<ListItemProps> = ({
     <Notes notes={notes} />
   </ListComponent>
 );
-
-export default ListItem;

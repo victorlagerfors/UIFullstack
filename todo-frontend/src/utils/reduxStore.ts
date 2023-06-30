@@ -34,9 +34,9 @@ export const { setName } = userSlice.actions;
 
 export default connectionSlice.reducer;
 
-export const reduxStore = configureStore({
-  reducer: {
-    connection: connectionSlice.reducer,
-    user: userSlice.reducer,
-  },
-});
+export const reducer = {
+  connection: connectionSlice.reducer,
+  user: userSlice.reducer,
+};
+
+export const reduxStore = configureStore({ reducer });

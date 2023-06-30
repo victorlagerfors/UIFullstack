@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { faSnowflake, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
-import ListItem from "../components/List";
+import { ListItem } from "../components/List";
 
 export function Lists() {
   const state: { lists: List[] } = useSyncedStore(synchronizedStore);
