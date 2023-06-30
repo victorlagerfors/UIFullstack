@@ -29,11 +29,17 @@ export function CardInput({
       {children}
       <FormStyled onSubmit={handleClick}>
         <input
+          data-testid="add-new-input"
           ref={inputRef}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-        <button disabled={!inputValue} type="submit">
+
+        <button
+          data-testid="add-new-button"
+          disabled={!inputValue}
+          type="submit"
+        >
           Add
         </button>
       </FormStyled>

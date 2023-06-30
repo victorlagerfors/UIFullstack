@@ -3,8 +3,6 @@ import { CardInput } from "../components/CardInput";
 import { useSyncedStore } from "@syncedstore/react";
 import { List, Note, synchronizedStore } from "../utils/syncedStore";
 import styled from "styled-components";
-import { faSnowflake, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
 import { ListItem } from "../components/List";
 
