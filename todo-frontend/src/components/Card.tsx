@@ -19,7 +19,7 @@ const CardContainer = styled.div`
   padding: 10px;
   margin: 5px 0px;
   min-height: 40px;
-  max-width: 250px; // to prevent it from getting too wide //TODO fix this
+  min-width: 250px; // to prevent it from getting too wide //TODO fix this
   width: 100%; // to fill the parent
   position: relative;
   background: linear-gradient(145deg, #acfbff, #ffffff);

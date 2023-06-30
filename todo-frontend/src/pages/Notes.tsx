@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { NoteCard } from "../components/NoteCard";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { v4 as uuid } from "uuid";
 
 export function Notes(props: { notes: Note[] }) {
   const { notes } = props;
@@ -42,7 +43,7 @@ export function Notes(props: { notes: Note[] }) {
       <CardInput
         onSubmit={(note) =>
           notes.unshift({
-            id: Date.now().toString(),
+            id: uuid(),
             description: note,
             lastUpdatedBy: userStatus,
             done: false,

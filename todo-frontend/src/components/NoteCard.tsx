@@ -57,8 +57,10 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
       done: false,
     };
 
-    note.children = note.children || [];
-    note.children.push(newChild);
+    if (!note.children) {
+      note.children = [];
+    }
+    note.children.unshift(newChild);
   };
 
   const handleAddChild = () => {

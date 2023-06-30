@@ -105,6 +105,7 @@ const ListContainer = styled.div`
 `;
 
 const ListComponent = styled.div<{ isFrozen: boolean }>`
+  flex: 0 0 auto;
   position: relative;
   border: 1px solid #ddd;
   padding: 20px;
@@ -117,7 +118,6 @@ const ListComponent = styled.div<{ isFrozen: boolean }>`
   min-height: 0;
   overflow: auto;
   min-width: 300px;
-  width: 100%;
 `;
 
 const DeleteButton = styled.button`
