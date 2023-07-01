@@ -33,6 +33,7 @@ export function Notes(props: { notes: Note[] }) {
     const noteToInsert: Note = {
       id: noteCopy.id,
       description: noteCopy.description,
+      detailedDescription: noteCopy.detailedDescription,
       lastUpdatedBy: userStatus,
       done: noteCopy.done,
       cost: noteCopy.cost,
@@ -53,8 +54,7 @@ export function Notes(props: { notes: Note[] }) {
             lastUpdatedBy: userStatus,
             done: false,
           })
-        }
-      ></CardInput>
+        }></CardInput>
       <DoneFilter>
         <FilterButton
           type="checkbox"
@@ -73,8 +73,7 @@ export function Notes(props: { notes: Note[] }) {
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
+                      {...provided.dragHandleProps}>
                       <NoteCard note={note} displayDone={showDone} />
                     </div>
                   )}
