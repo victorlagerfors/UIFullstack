@@ -1,14 +1,14 @@
+import { Logger } from '@nestjs/common';
 import {
-  WebSocketGateway,
   OnGatewayConnection,
-  WebSocketServer,
   OnGatewayDisconnect,
+  WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'ws';
+import { setPersistence, setupWSConnection } from 'y-websocket/bin/utils';
 import * as Y from 'yjs';
 import { MongodbPersistenceService } from './mongodb-persistence.service';
-import { Logger } from '@nestjs/common';
-import { setPersistence, setupWSConnection } from 'y-websocket/bin/utils';
 
 @WebSocketGateway({
   cors: {
@@ -33,8 +33,7 @@ export class MongodbPersistenceGateway
 
   async handleConnection(client: any, ...args: any[]) {
     Logger.log('Client connected', 'WebSocketGateway');
-    const req = client.upgradeReq; // Attempt to access the upgrade request object
-    //setupWSConnection(client, req);
+    const req = client.upgradeReq;
     setupWSConnection(client, req, { docName: this.docName });
     setPersistence({
       bindState: async (docName, ydoc) => {

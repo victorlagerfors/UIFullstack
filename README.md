@@ -17,6 +17,10 @@ Make sure you set up a MongoDB server somewhere, it will be needed for this appl
 2. `cd todo-frontend && npm install`
 3. `npm run dev`
 
+
+### Frontend notes
+You might notice that there is a lot of state mutations in this application, going against React best practices. However, the state management solution chosen for ensuring a synchronized state uses the concept of Functional Reactive Programming, where the best practice is to mutate the state directly.
+
 ## Using the app
 
 Voila! The app should now work. Use it as you wish.
@@ -27,7 +31,6 @@ The unit tests are run with Vitest and can be executed with `npm run test` in th
 
 ### E2E tests
 The E2E tests are run with Playwright and can be executed with `npm run test:e2e` in the todo-frontend directory
-
 
 # Done
 
