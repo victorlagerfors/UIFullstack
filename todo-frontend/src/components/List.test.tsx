@@ -26,7 +26,7 @@ const mockNote: Note[] = [
 const mockListItem = {
   title: "List Item Title",
   id: "list-1",
-  frozen: null,
+  frozen: undefined,
   notes: mockNote,
   userStatus: "testUser",
 };

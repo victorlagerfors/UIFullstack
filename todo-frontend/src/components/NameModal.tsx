@@ -2,7 +2,52 @@ import { useState } from "react";
 import { reduxStore, setName } from "../utils/reduxStore";
 import styled from "styled-components";
 
-// Feel free to use a different image or adjust the opacity to suit your needs
+interface NameModalProps {
+  onNameSubmit: () => void;
+}
+
+export function NameModal({ onNameSubmit }: NameModalProps): React.ReactNode {
+  const [name, setNameValue] = useState(localStorage.getItem("username") || "");
+
+  const handleNameSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    reduxStore.dispatch(setName(name));
+    localStorage.setItem("username", name);
+    onNameSubmit();
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNameValue(e.target.value);
+  };
+
+  return (
+    <>
+      <Background />
+      <Modal>
+        <ModalContent>
+          <ImageContainer />
+          <FormContainer>
+            <h2>Welcome to Notes</h2>
+            <form onSubmit={handleNameSubmit}>
+              <label>
+                <div>What's your name?</div>
+                <NameInput
+                  type="text"
+                  value={name}
+                  onChange={handleNameChange}
+                />
+              </label>
+              <div>
+                <StyledButton type="submit">Continue</StyledButton>
+              </div>
+            </form>
+          </FormContainer>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}
+
 const Background = styled.div`
   position: fixed;
   top: 0;
@@ -74,47 +119,3 @@ const StyledButton = styled.button`
   cursor: pointer;
   width: 100%;
 `;
-
-function NameModal({ onNameSubmit }) {
-  const [name, setNameValue] = useState(localStorage.getItem("username") || "");
-
-  const handleNameSubmit = (e) => {
-    e.preventDefault();
-    reduxStore.dispatch(setName(name));
-    localStorage.setItem("username", name);
-    onNameSubmit();
-  };
-
-  const handleNameChange = (e) => {
-    setNameValue(e.target.value);
-  };
-
-  return (
-    <>
-      <Background />
-      <Modal>
-        <ModalContent>
-          <ImageContainer />
-          <FormContainer>
-            <h2>Welcome to Notes</h2>
-            <form onSubmit={handleNameSubmit}>
-              <label>
-                <div>What's your name?</div>
-                <NameInput
-                  type="text"
-                  value={name}
-                  onChange={handleNameChange}
-                />
-              </label>
-              <div>
-                <StyledButton type="submit">Continue</StyledButton>
-              </div>
-            </form>
-          </FormContainer>
-        </ModalContent>
-      </Modal>
-    </>
-  );
-}
-
-export default NameModal;

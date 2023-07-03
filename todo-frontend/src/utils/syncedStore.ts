@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-ignore
-import { syncedStore, getYjsDoc } from "@syncedstore/core";
+import { getYjsDoc, syncedStore } from "@syncedstore/core";
 // @ts-ignore
-import { WebsocketProvider } from "y-websocket";
 import { createContext } from "react";
-import { setStatus, reduxStore } from "./reduxStore";
+import { WebsocketProvider } from "y-websocket";
+import { reduxStore, setStatus } from "./reduxStore";
 
 export const ConnectionStatusContext = createContext(null);
 
@@ -39,7 +39,7 @@ if (!wsUrl) {
 
 const wsProvider = new WebsocketProvider(wsUrl, "notes", doc);
 
-wsProvider.on("status", (event) => {
-  console.log("status", event.status); // logs "connected" or "disconnected"
+wsProvider.on("status", (event: { status: string }) => {
+  console.log("status", event.status); // logs "connected", "connecting" or "disconnected"
   reduxStore.dispatch(setStatus(event.status));
 });

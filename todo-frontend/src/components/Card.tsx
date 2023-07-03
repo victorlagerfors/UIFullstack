@@ -5,7 +5,7 @@ interface CardProps {
   children: ReactNode;
 }
 
-export function Card(props: CardProps) {
+export function Card(props: CardProps): ReactNode {
   return <CardContainer>{props.children}</CardContainer>;
 }
 

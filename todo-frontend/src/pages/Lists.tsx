@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { ListItem } from "../components/List";
 
-export function Lists() {
+export function Lists(): React.ReactNode {
   const state: { lists: List[] } = useSyncedStore(synchronizedStore);
   const userStatus = useSelector(
     (state: { user: { name: string } }) => state.user.name
@@ -25,8 +25,9 @@ export function Lists() {
 
   const freezeList = (id: string) => {
     const list = state.lists.find((list) => list.id === id);
+    if (!list) return;
     if (list.frozen && list.frozen === userStatus) {
-      list.frozen = null;
+      list.frozen = undefined;
     } else {
       list.frozen = userStatus;
     }

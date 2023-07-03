@@ -18,7 +18,10 @@ interface NoteCardProps {
   displayDone: boolean;
 }
 
-export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
+export function NoteCard({
+  note,
+  displayDone,
+}: NoteCardProps): React.ReactNode {
   const [isEditing, setIsEditing] = useState(false);
   const [showInput, setShowInput] = useState(false);
 
@@ -34,17 +37,17 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
     return totalCost;
   };
 
-  const updateNote = (newDescription) => {
+  const updateNote = (newDescription: string) => {
     note.description = newDescription;
     note.lastUpdatedBy = userStatus;
   };
 
-  const updateDetailedDescription = (newDescription) => {
+  const updateDetailedDescription = (newDescription: string) => {
     note.detailedDescription = newDescription;
     note.lastUpdatedBy = userStatus;
   };
 
-  const updateCost = (cost) => {
+  const updateCost = (cost: string) => {
     const numberCost = Number(cost);
     if (isNaN(numberCost)) {
       console.log("error");
@@ -54,7 +57,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
     }
   };
 
-  const addChildNote = (childDescription) => {
+  const addChildNote = (childDescription: string) => {
     const newChild = {
       id: Date.now().toString(),
       description: childDescription,
@@ -87,8 +90,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
           <DoneButton
             checked={note.done}
             onChange={() => (note.done = !note.done)}
-            type="checkbox"
-          ></DoneButton>
+            type="checkbox"></DoneButton>
           <DescriptionContainer>
             {isEditing ? (
               <>
@@ -104,14 +106,15 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
                 <DetailedDescriptionTextArea
                   value={note.detailedDescription}
                   onChange={(e) => updateDetailedDescription(e.target.value)}
-                  autoFocus
-                ></DetailedDescriptionTextArea>
+                  autoFocus></DetailedDescriptionTextArea>
               </>
             ) : (
               <>
                 <TitleDescription>{note.description}</TitleDescription>
                 <DetailedDescription>
-                  <ReactMarkdown>{note.detailedDescription}</ReactMarkdown>
+                  {note.detailedDescription && (
+                    <ReactMarkdown>{note.detailedDescription}</ReactMarkdown>
+                  )}
                 </DetailedDescription>
               </>
             )}
@@ -120,15 +123,13 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
           {isEditing ? (
             <IconButton
               data-testid="done-button"
-              onClick={() => setIsEditing(false)}
-            >
+              onClick={() => setIsEditing(false)}>
               <Check />
             </IconButton>
           ) : (
             <IconButton
               data-testid="edit-button"
-              onClick={() => setIsEditing(true)}
-            >
+              onClick={() => setIsEditing(true)}>
               <Edit />
             </IconButton>
           )}
@@ -163,7 +164,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, displayDone }) => {
       </Indent>
     </React.Fragment>
   );
-};
+}
 
 const TitleDescription = styled.span`
   font-size: 18px;

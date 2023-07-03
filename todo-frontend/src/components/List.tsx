@@ -85,14 +85,14 @@ const FreezeButton = styled.button<{
 interface ListItemProps {
   title: string;
   id: string;
-  frozen: string | null;
+  frozen: string | undefined;
   notes: Note[];
   userStatus: string;
   deleteList: (id: string) => void;
   freezeList: (id: string) => void;
 }
 
-export const ListItem: React.FC<ListItemProps> = ({
+export function ListItem({
   title,
   id,
   frozen,
@@ -100,29 +100,30 @@ export const ListItem: React.FC<ListItemProps> = ({
   userStatus,
   deleteList,
   freezeList,
-}) => (
-  <ListComponent $isFrozen={!!frozen} key={id}>
-    <FreezeButton
-      data-testid="freeze-button"
-      $isFrozen={!!frozen}
-      $frozenByMe={frozen === userStatus}
-      onClick={() => freezeList(id)}
-      disabled={!!(frozen && frozen !== userStatus)}
-    >
-      <span>
-        <Snowflake /> <>{frozen ? `@${frozen}` : ""}</>
-      </span>
-    </FreezeButton>
-    <DeleteButton data-testid="delete-button" onClick={() => deleteList(id)}>
-      <Cross />
-    </DeleteButton>
-    <h2>{title}</h2>
-    {frozen ? (
-      <ListOverlay>
-        <FrozenIcon />
-        <FrozenText>Frozen by {frozen ? `@${frozen}` : ""}</FrozenText>
-      </ListOverlay>
-    ) : null}
-    <Notes notes={notes} />
-  </ListComponent>
-);
+}: ListItemProps): React.ReactNode {
+  return (
+    <ListComponent $isFrozen={!!frozen} key={id}>
+      <FreezeButton
+        data-testid="freeze-button"
+        $isFrozen={!!frozen}
+        $frozenByMe={frozen === userStatus}
+        onClick={() => freezeList(id)}
+        disabled={!!(frozen && frozen !== userStatus)}>
+        <span>
+          <Snowflake /> <>{frozen ? `@${frozen}` : ""}</>
+        </span>
+      </FreezeButton>
+      <DeleteButton data-testid="delete-button" onClick={() => deleteList(id)}>
+        <Cross />
+      </DeleteButton>
+      <h2>{title}</h2>
+      {frozen ? (
+        <ListOverlay>
+          <FrozenIcon />
+          <FrozenText>Frozen by {frozen ? `@${frozen}` : ""}</FrozenText>
+        </ListOverlay>
+      ) : null}
+      <Notes notes={notes} />
+    </ListComponent>
+  );
+}

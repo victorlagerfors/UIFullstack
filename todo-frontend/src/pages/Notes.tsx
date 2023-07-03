@@ -1,5 +1,5 @@
 // Notes.tsx
-import { useState } from "react";
+import { useCallback, useState, ReactNode } from "react";
 import { CardInput } from "../components/CardInput";
 import { Note } from "../utils/syncedStore";
 import { useSelector } from "react-redux";
@@ -13,53 +13,63 @@ import {
 } from "@hello-pangea/dnd";
 import { v4 as uuid } from "uuid";
 
-export function Notes(props: { notes: Note[] }) {
-  const { notes } = props;
+interface NotesProps {
+  notes: Note[];
+}
 
+export function Notes({ notes }: NotesProps): ReactNode {
   const [showDone, setShowDone] = useState(true);
-
   const userStatus = useSelector(
     (state: { user: { name: string } }) => state.user.name
   );
 
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
-      return;
-    }
-    const startIndex = result.source.index;
-    const endIndex = result.destination.index;
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      if (!result.destination) {
+        return;
+      }
+      const startIndex = result.source.index;
+      const endIndex = result.destination.index;
 
-    const noteCopy = notes[startIndex];
-    const noteToInsert: Note = {
-      id: noteCopy.id,
-      description: noteCopy.description,
-      detailedDescription: noteCopy.detailedDescription,
-      lastUpdatedBy: userStatus,
-      done: noteCopy.done,
-      cost: noteCopy.cost,
-      children: JSON.parse(JSON.stringify(noteCopy.children || [])),
-    };
+      const noteCopy = notes[startIndex];
+      const noteToInsert: Note = {
+        id: noteCopy.id,
+        description: noteCopy.description,
+        detailedDescription: noteCopy.detailedDescription,
+        lastUpdatedBy: userStatus,
+        done: noteCopy.done,
+        cost: noteCopy.cost,
+        children: JSON.parse(JSON.stringify(noteCopy.children || [])),
+      };
 
-    notes.splice(startIndex, 1);
-    notes.splice(endIndex, 0, noteToInsert);
-  };
+      notes.splice(startIndex, 1);
+      notes.splice(endIndex, 0, noteToInsert);
+    },
+    [notes, userStatus]
+  );
+
+  const handleOnSubmit = useCallback(
+    (description: string) => {
+      notes.unshift({
+        id: uuid(),
+        description: description,
+        lastUpdatedBy: userStatus,
+        done: false,
+      });
+    },
+    [notes, userStatus]
+  );
 
   return (
     <NoteContainer>
-      <CardInput
-        onSubmit={(note) =>
-          notes.unshift({
-            id: uuid(),
-            description: note,
-            lastUpdatedBy: userStatus,
-            done: false,
-          })
-        }></CardInput>
+      <CardInput onSubmit={handleOnSubmit}></CardInput>
       <DoneFilter>
         <FilterButton
           type="checkbox"
           checked={showDone}
-          onChange={(e) => setShowDone(e.target.checked)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setShowDone(e.target.checked)
+          }
         />
         <span>Show done?</span>
       </DoneFilter>

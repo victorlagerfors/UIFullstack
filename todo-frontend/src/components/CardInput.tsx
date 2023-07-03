@@ -2,19 +2,20 @@ import { Card } from "./Card";
 import { ReactNode, SyntheticEvent, useRef, useState } from "react";
 import styled from "styled-components";
 
+interface CardInputProps {
+  onSubmit: (value: string) => void;
+  children?: ReactNode;
+}
+
 export function CardInput({
   onSubmit,
   children, // Add children here
-}: {
-  onSubmit: (value: string) => void;
-  children?: ReactNode; // Add children type here
-}) {
+}: CardInputProps): ReactNode {
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = (event: SyntheticEvent) => {
     // Do something with inputValue
-    console.log(inputValue);
     onSubmit(inputValue);
     event.preventDefault();
     // Reset the input value to empty string and focus the input for the next entry
@@ -38,8 +39,7 @@ export function CardInput({
         <button
           data-testid="add-new-button"
           disabled={!inputValue}
-          type="submit"
-        >
+          type="submit">
           Add
         </button>
       </FormStyled>

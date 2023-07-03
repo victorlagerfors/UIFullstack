@@ -40,3 +40,5 @@ export const reducer = {
 };
 
 export const reduxStore = configureStore({ reducer });
+
+export type RootState = ReturnType<typeof reduxStore.getState>;

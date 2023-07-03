@@ -2,13 +2,17 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { reduxStore, setName } from "../utils/reduxStore";
+import { RootState, reduxStore, setName } from "../utils/reduxStore";
 import { useEffect, useState } from "react";
-import NameModal from "../components/NameModal";
+import { NameModal } from "../components/NameModal";
 
 const Spinner = () => <FontAwesomeIcon icon={faSpinner} spin />;
 const Check = () => <FontAwesomeIcon icon={faCheck} />;
 const Cross = () => <FontAwesomeIcon icon={faTimes} />;
+
+type Props = {
+  children?: React.ReactNode;
+};
 
 const TopBar = styled.div`
   height: 60px;
@@ -39,13 +43,11 @@ const Content = styled.div`
 
 const LogoutButton = styled.button``;
 
-export function LayoutWrapper(props) {
+export function LayoutWrapper(props: Props): React.ReactNode {
   const connectionStatus = useSelector(
-    (state: { connection: { status: string } }) => state.connection.status
+    (state: RootState) => state.connection.status
   );
-  const userStatus = useSelector(
-    (state: { user: { name: string } }) => state.user.name
-  );
+  const userStatus = useSelector((state: RootState) => state.user.name);
 
   const handleLogout = () => {
     localStorage.removeItem("username"); // Remove the username from local storage
